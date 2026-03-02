@@ -12,6 +12,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
+      - name: Install AppForLanesManager
+        run: mvn install -DskipTests
+        working-directory: AppForLanesManager
       - name: Test AppForCheckin
         run: mvn test
         working-directory: AppForCheckin

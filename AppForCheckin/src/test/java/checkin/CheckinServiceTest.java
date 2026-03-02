@@ -2,6 +2,8 @@ package checkin;
 
 import checkin.BizLogic.CheckinService;
 import checkin.Adapters.OutgoingAdapters.ForRegisteringArrivals.MockLanesManager;
+import checkin.Adapters.OutgoingAdapters.ForRegisteringArrivals.RealLanesManager;
+import lanesmanager.BizLogic.LanesManagerService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,5 +19,11 @@ public class CheckinServiceTest {
     void test_connectLanesManager_returns_greetings_from_mock_lanes_manager() {
         CheckinService service = new CheckinService();
         assertEquals("greetings from mock Lanes Manager", service.connectLanesManager(new MockLanesManager()));
+    }
+
+    @Test
+    void test_connectLanesManager_returns_greetings_from_real_lanes_manager() {
+        CheckinService service = new CheckinService();
+        assertEquals("greetings from Lanes Manager", service.connectLanesManager(new RealLanesManager(new LanesManagerService())));
     }
 }
