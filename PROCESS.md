@@ -60,13 +60,13 @@ AppForXxx/
       ForConfiguring/       ← interface: greetings(), connectXxx()
       ForUsing/             ← interface: business methods
     Outgoing/
-      ToYyy/                ← interface: one per secondary actor
+      ForXxx/               ← interface: one per secondary actor, named forXxx
   Adapters/
     IncomingAdapters/
       ForConfiguring/       ← implements ForConfiguring interface
       ForUsing/             ← implements ForUsing interface
     OutgoingAdapters/
-      ToYyy/                ← MockYyy + real adapter (added later)
+      ForXxx/               ← MockYyy + real adapter (added later)
 ```
 
 ## Step 0 — Create Folder Structure (before any code)
@@ -81,12 +81,12 @@ AppForXxx/
     Incoming/           ← not needed in JavaScript, Ruby, Python
       ForConfiguring/
       ForUsing/
-    Outgoing/           ← add ToYyy/ subfolders as secondary actors are identified
+    Outgoing/           ← add ForXxx/ subfolders as secondary actors are identified
   Adapters/
     IncomingAdapters/
       ForConfiguring/
       ForUsing/
-    OutgoingAdapters/   ← add ToYyy/ subfolders as secondary actors are identified
+    OutgoingAdapters/   ← add ForXxx/ subfolders as secondary actors are identified
   Tests/
 ```
 
