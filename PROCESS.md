@@ -52,18 +52,47 @@ Language-specific structure to be confirmed at project setup. General pattern:
 ```
 AppForXxx/
   BizLogic/
-    XxxService         ← core logic, no adapter dependencies
+    XxxService              ← core logic, no adapter dependencies
     Tests/
-      XxxServiceTest   ← test case is always the primary actor
+      XxxServiceTest        ← test case is always the primary actor
+  Ports/
+    Incoming/
+      ForConfiguring/       ← interface: greetings(), connectXxx()
+      ForUsing/             ← interface: business methods
+    Outgoing/
+      ToYyy/                ← interface: one per secondary actor
   Adapters/
     IncomingAdapters/
-      ForConfiguring/  ← greetings(), connectXxx() — interface + implementation
-      ForUsing/        ← business methods — interface + implementation
+      ForConfiguring/       ← implements ForConfiguring interface
+      ForUsing/             ← implements ForUsing interface
     OutgoingAdapters/
-      ToYyy/           ← one folder per secondary actor
-        YyyPort        ← interface (in typed languages)
-        MockYyy        ← mock implementation
+      ToYyy/                ← MockYyy + real adapter (added later)
 ```
+
+## Step 0 — Create Folder Structure (before any code)
+
+**Before writing any code for a new app, create the full folder skeleton.** All folders are created empty (use `.gitkeep` to commit empty folders). This declares the architecture before any implementation exists.
+
+Folders to create for every new app:
+```
+AppForXxx/
+  BizLogic/
+  Ports/                ← typed languages only (Java, C#, Go, etc.)
+    Incoming/           ← not needed in JavaScript, Ruby, Python
+      ForConfiguring/
+      ForUsing/
+    Outgoing/           ← add ToYyy/ subfolders as secondary actors are identified
+  Adapters/
+    IncomingAdapters/
+      ForConfiguring/
+      ForUsing/
+    OutgoingAdapters/   ← add ToYyy/ subfolders as secondary actors are identified
+  Tests/
+```
+
+**Note on Ports/:** Typed languages (Java, C#, Go) need the `Ports/` folder because interfaces must be declared explicitly as separate files. Dynamically typed languages (JavaScript, Ruby, Python) do not need `Ports/` — the port contract is implicit in the method names.
+
+No code files are created in Step 0. Only folders and `.gitkeep` files.
 
 ## Key Rules
 
