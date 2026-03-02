@@ -41,8 +41,10 @@ Slices are numbered globally across all apps, not per-app.
 
 1. **Dialog** — discuss the next slice. Agree on what will be created.
 2. **SLICES.xlsx** — add the new row. Review before writing any code.
-3. **Code** — write code and tests. Say: "Run tests in AppForXxx."
-4. **Tests pass locally** — then push to git.
+3. **Code** — write code and tests. Provide the exact terminal command to run:
+   - Normal slice: `cd ~/Desktop/AI_Games/Bowlingv2/AppForXxx && mvn test`
+   - `connect hexagons` slice: see Maven Wiring section below.
+4. **Tests pass locally** — then commit and push. Claude provides the git commit command; user runs `git push` from their terminal (Claude has no network access).
 5. **GitHub Actions** — check the Actions tab. Report errors back.
 
 ## Folder Structure (per app)
@@ -103,6 +105,45 @@ No code files are created in Step 0. Only folders and `.gitkeep` files.
 - Never write slices speculatively. Each slice comes from dialog.
 - Slice 1 (greetings) has no constructor arguments.
 - External systems that don't implement `greetings()` (e.g. payment gateway, hardware) need a case-by-case initial probe call specified in the slice.
+
+## Maven Wiring for `connect hexagons` slices (Java)
+
+When a `connect hexagons` slice replaces a mock with a real app, the calling app needs to reference the real app as a Maven dependency. Four things change:
+
+**1. pom.xml of the calling app** — add the dependency:
+```xml
+<dependency>
+    <groupId>bowling</groupId>
+    <artifactId>AppForXxx</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
+**2. Real adapter** — create `RealXxx.java` in the calling app's `Adapters/OutgoingAdapters/ForXxx/`. It implements the calling app's outgoing port interface and wraps the real `XxxService`:
+```java
+public class RealXxx implements ForXxx {
+    private final XxxService xxxService;
+    public RealXxx(XxxService xxxService) { this.xxxService = xxxService; }
+    @Override
+    public String greetings() { return xxxService.greetings(); }
+}
+```
+
+**3. Terminal commands** — install the dependency app first, then test the calling app:
+```
+cd ~/Desktop/AI_Games/Bowlingv2/AppForXxx && mvn install
+cd ~/Desktop/AI_Games/Bowlingv2/AppForCalling && mvn test
+```
+
+**4. CI (test.yml)** — add an install step for the dependency app before the test step in the calling app's job:
+```yaml
+- name: Install AppForXxx
+  run: mvn install -DskipTests
+  working-directory: AppForXxx
+- name: Test AppForCalling
+  run: mvn test
+  working-directory: AppForCalling
+```
 
 ## CI
 
