@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+
+# Java / Maven
+target/
+*.class
+*.jar
+
+# Java / Gradle
+build/
+.gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
