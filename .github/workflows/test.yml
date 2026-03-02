@@ -11,6 +11,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
       - name: Test AppForCheckin
         run: mvn test
         working-directory: AppForCheckin
